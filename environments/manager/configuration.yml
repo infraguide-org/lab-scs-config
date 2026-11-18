@@ -12,7 +12,7 @@ manager_version: 11.0.2
 
 ##########################
 # ansible
-
+internal_interface: cpln0
 ceph_ansible_enable: false
 ##########################
 # ara

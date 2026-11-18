@@ -38,7 +38,7 @@ network_ethernets:
 ##########################################################
 # kolla
 
-network_interface: eno1
+network_interface: cpln0
 
 # NOTE: These parameters are only commented out if necessary.
 # DOCS: https://osism.tech/docs/guides/configuration-guide/openstack/#network-interfaces

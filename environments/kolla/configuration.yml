@@ -16,20 +16,30 @@
 # naming one series while the tags name another fails the pull.
 docker_namespace: "kolla/release/{{ openstack_version }}"
 
+# TODO:
+# skopeo list-tags docker://registry.osism.tech/quay/openstack.kolla/neutron-server
+# skopeo list-tags docker://registry.osism.tech/kolla/release/2025.1/neutron-server
+# kolla_neutron_version: "28.0.3.20261019"
+# kolla_neutron_version: "28.0.3.20261008"
+#neutron_server_image: registry.osism.tech/kolla/release/2026.1/neutron-server
+# neutron_server_tag: 28.0.3.20261019
+#neutron_tag: 28.0.3.20261019
+
+
 ##########################################################
 # loadbalancer
 
-kolla_internal_fqdn: int.os.lab.nfgd.net
-kolla_external_fqdn: services.lab.nfgd.net
-
-kolla_internal_vip_address: 10.20.8.35
-kolla_external_vip_address: 10.34.10.35
-
-# TODO
-# kolla_enable_tls_internal: "yes"
-# kolla_enable_tls_external: "yes"
-kolla_enable_tls_internal: "no"
-kolla_enable_tls_external: "no"
+# kolla_internal_fqdn: int.os.lab.nfgd.net
+# kolla_external_fqdn: services.lab.nfgd.net
+# 
+# kolla_internal_vip_address: 10.20.8.35
+# kolla_external_vip_address: 10.34.10.35
+# 
+# # TODO
+# # kolla_enable_tls_internal: "yes"
+# # kolla_enable_tls_external: "yes"
+# kolla_enable_tls_internal: "no"
+# kolla_enable_tls_external: "no"
 
 # kolla_copy_ca_into_containers: "yes"
 
@@ -43,7 +53,7 @@ openstack_service_workers: 5
 opensearch_heap_size: "4g"
 
 # neutron
-neutron_plugin_agent: "ovn"
+# neutron_plugin_agent: "ovn"
 neutron_ovn_availability_zones: [nova]
 neutron_dns_domain: lab.nfgd.net.
 
@@ -52,7 +62,7 @@ neutron_dns_domain: lab.nfgd.net.
 # octavia_network_type: tenant
 
 # designate
-designate_ns_record: openstack.lab.nfgd.net
+# designate_ns_record: openstack.lab.nfgd.net
 
 # ceilometer
 # With ceilometer enabled, its polling agents serve their samples on this
@@ -90,3 +100,293 @@ designate_ns_record: openstack.lab.nfgd.net
 # letsencrypt_email: "<The email used for registration and recovery contact>"
 # kolla_enable_tls_external: "yes"
 # kolla_enable_tls_internal: "yes"
+
+
+# TODO
+# ---
+enable_docker_repo: "no"
+enable_heat: "yes"
+enable_mariabackup: "yes"
+# enable_cluster_user_trust: "yes"
+# ---
+enable_letsencrypt: "yes"
+letsencrypt_email:  "admin@lab.nfgd.net"
+letsencrypt_external_fqdns: "{{[kolla_external_fqdn] + openstack_external_fqdns + ceph_external_fqdns + registry_fqdn}}"
+# ---
+enable_ceph_rgw: "yes"
+enable_ceph_rgw_keystone: "yes"
+enable_ceph_rgw_loadbalancer: "no"
+# enable_manila_backend_cephfs_native: "yes"
+ceph_rgw_swift_account_in_url: "yes"
+ceph_rgw_swift_compatibility: "yes"
+ceph_nova_user: cinder
+
+# ---
+enable_cinder:               "yes"
+enable_cinder_backup:        "yes"
+enable_cinder_backend_iscsi: "no"
+enable_cinder_backend_lvm:   "no"
+cinder_backend_ceph:         "yes"
+cinder_backup_driver:        "ceph"
+cinder_cluster_name:         "ceph"
+cinder_cluster_skip_precheck: "no"
+# ---
+enable_cloudkitty:            "no"
+cloudkitty_collector_backend: "prometheus"
+cloudkitty_storage_backend:   "influxdb" # "opensearch"
+enable_influxdb:              "{{enable_cloudkitty}}"
+# Source: https://github.com/infraguide-org/lab-openstack
+# Copyright (c) 2026 infraguide.org, MIT License
+# ---
+enable_designate:                    "false"
+designate_backend:                   "bind9"
+designate_ns_record:                 [ "dns.lab.nfgd.net" ]
+designate_enable_notifications_sink: "yes"
+# Source: https://github.com/infraguide-org/lab-openstack
+# Copyright (c) 2026 infraguide.org, MIT License
+# ---
+haproxy_single_external_frontend: "yes"
+
+# NOTE:
+# To make this work we need follliwing DNS entries
+# DNS for OpenStack
+# *.os.svc.lab.nfgd.net              -> default.os.svc.lab.nfgd.net
+# *.openstack.services.lab.nfgd.net  -> default.os.svc.lab.nfgd.net
+# default.os.svc.lab.nfgd.net        -> default.os5.svc.lab.nfgd.net
+# defaul.os5.svc.lab.nfgd.net        -> [IP]
+#
+# # DNS for Ceph
+# *.ceph.services.lab.nfgd.net       -> default.ceph.svc.lab.nfgd.net
+# default.ceph.svc.lab.nfgd.net      -> default.ceph3.svc.lab.nfgd.net
+# default.ceph3.svc.lab.nfgd.net     -> [IP]
+
+#
+# OpenStack
+#
+
+# user acceess
+grafana_external_fqdn:                 "monitoring.openstack.services.{{external_domain}}"
+horizon_external_fqdn:                 "dashboard.openstack.services.{{external_domain}}"
+opensearch_dashboards_external_fqdn:   "logging.openstack.services.{{external_domain}}"
+# sys access
+barbican_external_fqdn:                "barbican.os.svc.{{external_domain}}"
+ceph_rgw_external_fqdn:                "s3.svc.{{external_domain}}"
+cinder_external_fqdn:                  "cinder.os.svc.{{external_domain}}"
+cloudkitty_external_fqdn:              "cloudkitty.os.svc.{{external_domain}}"
+designate_external_fqdn:               "designate.os.svc.{{external_domain}}"
+glance_external_fqdn:                  "glance.os.svc.{{external_domain}}"
+heat_cfn_external_fqdn:                "heat-cfn.os.svc.{{external_domain}}"
+heat_external_fqdn:                    "heat.os.svc.{{external_domain}}"
+ironic_external_fqdn:                  "ironic.os.svc.{{external_domain}}"
+ironic_inspector_external_fqdn:        "ironic-i.os.svc.{{external_domain}}"
+keystone_external_fqdn:                "keystone.os.svc.{{external_domain}}"
+magnum_external_fqdn:                  "magnum.os.svc.{{external_domain}}"
+manila_external_fqdn:                  "manilla.os.svc.{{external_domain}}"
+masakari_external_fqdn:                "masakari.os.svc.{{external_domain}}"
+mistral_external_fqdn:                 "mistral.os.svc.{{external_domain}}"
+neutron_external_fqdn:                 "neutron.os.svc.{{external_domain}}"
+nova_external_fqdn:                    "nova.os.svc.{{external_domain}}"
+nova_metadata_external_fqdn:           "nova-m.os.svc.{{external_domain}}"
+nova_novncproxy_fqdn:                  "novncproxy.os.svc.{{external_domain}}"
+octavia_external_fqdn:                 "octavia.os.svc.{{external_domain}}"
+placement_external_fqdn:               "placement.os.svc.{{external_domain}}"
+prometheus_alertmanager_external_fqdn: "prometheus-a.os.svc.{{external_domain}}"
+prometheus_external_fqdn:              "prometheus-s.os.svc.{{external_domain}}"
+skyline_apiserver_external_fqdn:       "skyline-a.os.svc.{{external_domain}}"
+skyline_console_external_fqdn:         "skyline-c.os.svc.{{external_domain}}"
+swift_external_fqdn:                   "{{ceph_rgw_external_fqdn}}"
+tacker_external_fqdn:                  "tacker.os.svc.{{external_domain}}"
+trove_external_fqdn:                   "trove.os.svc.{{external_domain}}"
+watcher_external_fqdn:                 "watcher.os.svc.{{external_domain}}"
+zun_external_fqdn:                     "zun.os.svc.{{external_domain}}"
+zun_wsproxy_external_fqdn:             "zun-w.os.svc.{{external_domain}}"
+
+openstack_external_fqdns: |
+  {{
+      [cinder_external_fqdn]
+    + [glance_external_fqdn]
+    + [keystone_external_fqdn]
+    + [neutron_external_fqdn]
+    + [nova_external_fqdn]
+    + [nova_metadata_external_fqdn]
+    + [nova_novncproxy_fqdn]
+    + [placement_external_fqdn]
+    + ( enable_horizon                          | bool | ternary([horizon_external_fqdn],                 []) )
+    + ( enable_opensearch_dashboards_external   | bool | ternary([opensearch_dashboards_external_fqdn],   []) )
+    + ( enable_grafana_external                 | bool | ternary([grafana_external_fqdn],                 []) )
+    + ( enable_barbican                         | bool | ternary([barbican_external_fqdn],                []) )
+    + ( enable_ceph_rgw_loadbalancer            | bool | ternary([ceph_rgw_external_fqdn],                []) )
+    + ( enable_cloudkitty                       | bool | ternary([cloudkitty_external_fqdn],              []) )
+    + ( enable_designate                        | bool | ternary([designate_external_fqdn],               []) )
+    + ( enable_heat                             | bool | ternary([heat_cfn_external_fqdn],                []) )
+    + ( enable_heat                             | bool | ternary([heat_external_fqdn],                    []) )
+    + ( enable_ironic                           | bool | ternary([ironic_external_fqdn],                  []) )
+    + ( enable_ironic                           | bool | ternary([ironic_inspector_external_fqdn],        []) )
+    + ( enable_magnum                           | bool | ternary([magnum_external_fqdn],                  []) )
+    + ( enable_manila                           | bool | ternary([manila_external_fqdn],                  []) )
+    + ( enable_masakari                         | bool | ternary([masakari_external_fqdn],                []) )
+    + ( enable_mistral                          | bool | ternary([mistral_external_fqdn],                 []) )
+    + ( enable_octavia                          | bool | ternary([octavia_external_fqdn],                 []) )
+    + ( enable_prometheus_alertmanager_external | bool | ternary([prometheus_alertmanager_external_fqdn], []) )
+    + ( enable_prometheus_server_external       | bool | ternary([prometheus_external_fqdn],              []) )
+    + ( enable_skyline                          | bool | ternary([skyline_apiserver_external_fqdn],       []) )
+    + ( enable_skyline                          | bool | ternary([skyline_console_external_fqdn],         []) )
+    + ( enable_ceph_rgw_keystone                | bool | ternary([swift_external_fqdn],                   []) )
+    + ( enable_tacker                           | bool | ternary([tacker_external_fqdn],                  []) )
+    + ( enable_trove                            | bool | ternary([trove_external_fqdn],                   []) )
+    + ( enable_watcher                          | bool | ternary([watcher_external_fqdn],                 []) )
+    + ( enable_zun                              | bool | ternary([zun_external_fqdn],                     []) )
+    + ( enable_zun                              | bool | ternary([zun_wsproxy_external_fqdn],             []) )
+  }}
+
+
+#
+# Ceph
+#
+
+# user access
+dashboard_ceph_fqdn:                   "dashboard.ceph.services.{{external_domain}}"
+grafana_ceph_fqdn:                     "monitoring.ceph.services.{{external_domain}}"
+# sys access
+rgw_ceph_fqdn:                         "{{ceph_rgw_external_fqdn}}"
+prometheus_ceph_fqdn:                  "prometheus-s.ceph.svc.{{external_domain}}"
+alertmanager_ceph_fqdn:                "prometheus-a.ceph.svc.{{external_domain}}"
+ceph_external_fqdns:
+  - "{{dashboard_ceph_fqdn}}"
+  - "{{grafana_ceph_fqdn}}"
+  - "{{rgw_ceph_fqdn}}"
+  - "{{rgw_ceph_fqdn|regex_replace('svc', 'services')}}"
+  # - "*.{{rgw_ceph_fqdn}}"                                  # does not work with HTTP-01
+  # - "*.{{rgw_ceph_fqdn|regex_replace('svc', 'services')}}" # does not work with HTTP-01
+  - "{{prometheus_ceph_fqdn}}"
+  - "{{alertmanager_ceph_fqdn}}"
+
+registry_fqdn:
+  - "repohub.services.{{external_domain}}"
+  - "registry.services.{{external_domain}}"
+  - "artifact-repositry.services.{{external_domain}}"
+  - "ar.svc.{{external_domain}}"
+  - "reg.svc.{{external_domain}}"
+# ---
+glance_backend_ceph: "yes"
+# ---
+enable_ironic:          "false"
+enable_ironic_ipxe:     "yes"
+enable_ironic_pxe_uefi: "yes"
+# ---
+keystone_token_provider: 'fernet'
+fernet_token_expiry: 86400
+# Source: https://github.com/infraguide-org/lab-openstack
+# Copyright (c) 2026 infraguide.org, MIT License
+# ---
+# TODO
+# kolla_internal_fqdn:        "master.{{internal_domain}}"
+kolla_internal_fqdn:        "int.{{internal_domain}}"
+# FIXME: remove to inventory
+internal_domain:            "os.lab.nfgd.net"
+
+# kolla_external_fqdn:        "os.services.{{external_domain}}"
+kolla_external_fqdn:        "{{keystone_external_fqdn}}"
+# FIXME: remove to inventory
+external_domain:            "lab.nfgd.net"
+
+# kolla_container_engine:     docker
+#
+# Docker
+#
+# FIXME: remove to inventory
+# docker_registry_insecure: "yes"
+# docker_registry:          "registry.lab.nfgd.net"
+# docker_namespace:         "quay/openstack.kolla"
+# docker_registry_username:
+# docker_registry_password:
+
+# config_strategy: "COPY_ALWAYS"
+kolla_base_distro: "ubuntu"
+# ---
+enable_central_logging: "false"
+enable_fluentd:         "false"
+# enable_prometheus_elasticsearch_exporter: "yes"
+# opensearch_soft_retention_period_days: "2"
+# opensearch_hard_retention_period_days: "3"
+# ---
+enable_magnum:             "false"
+enable_cluster_user_trust: "yes"
+
+magnum_extra_volumes:
+  - "/etc/capi/helm:/usr/local/bin/helm"
+# ---
+enable_masakari:                 "false"
+enable_masakari_instancemonitor: "{{ enable_masakari | bool }}"
+# enable_masakari_hostmonitor:     "{{ enable_masakari | bool }}"
+enable_masakari_hostmonitor:     "no"
+# ---
+enable_grafana:                           "yes"
+enable_prometheus:                        "yes"
+enable_prometheus_haproxy_exporter:       "yes"
+enable_prometheus_mysqld_exporter:        "yes"
+enable_prometheus_node_exporter:          "yes"
+enable_prometheus_cadvisor:               "yes"
+enable_prometheus_memcached:              "yes"
+enable_prometheus_alertmanager:           "yes"
+enable_prometheus_ceph_mgr_exporter:      "no"
+enable_prometheus_openstack_exporter:     "yes"
+enable_prometheus_elasticsearch_exporter: "yes"
+enable_prometheus_blackbox_exporter:      "yes"
+enable_ironic_prometheus_exporter:        "no"
+enable_prometheus_rabbitmq_exporter:      "yes"
+enable_prometheus_libvirt_exporter:       "yes"
+enable_prometheus_fluentd_integration:    "yes"
+
+enable_prometheus_server_external:        "yes"
+
+prometheus_blackbox_exporter_endpoints: |
+  {{
+    openstack_external_fqdns
+      | map('split', '.') | map('first') | map('regex_replace', '-', '_')
+      | product(['os_endpoint:https://'] ) | list | map('join', ':')
+      | zip(openstack_external_fqdns) | list | map('join')
+  }}
+# ---
+neutron_plugin_agent:        "ovn"
+# FIXME: deactivate
+# neutron_ovn_dhcp_agent:      "yes"
+neutron_ovn_dhcp_agent:      "no"
+neutron_ovn_distributed_fip: "yes"
+# ---
+enable_neutron_dvr: "yes"
+enable_neutron_agent_ha: "yes"
+# enable_neutron_genericswitch: "yes"
+# enable_neutron_bgp_dragent: "yes"
+
+# enable_neutron_packet_logging: "no"       # packet logging when the registered events occur.
+# enable_neutron_vpnaas: "yes"              # vpn as a service
+# enable_neutron_sriov: "no"                # admin state of ports, configure port security (enable and disable spoof checking), and configure QoS rate limiting and minimum bandwidth
+# enable_neutron_fwaas: "yes"               # firewall at the router level (perimeter FW)
+# enable_neutron_qos: "no"                  # set network requirements like bandwidth, latency, jitter, and reliability in order to satisfy a Service Level Agreement (SLA) between an application provider and end users.
+# enable_neutron_bgp_dragent: "no"          # BGP dynamic routing
+# enable_neutron_provider_networks: "no"    # Provider networks connect, or map, to existing layer-2 networks in the data center, typically using VLAN (Create VMs in existent networks)
+# enable_neutron_segments: "no"             # management for segement ids (vxlan, vlan ...) for user defined networks, which ids are allowed to use
+# enable_neutron_sfc: "no"                  # Service Function Chaining, routes packets through one or more service functions instead of conventional routing (next hop), security and more features
+# enable_neutron_trunk: "no"                # Allows multiple networks to be connected to an instance using a single virtual NIC
+# enable_neutron_metering: "no"             # Enables o to account the traffic in/out of the OpenStack environment
+# enable_neutron_infoblox_ipam_agent: "no"  # IPAM, DNS, DHCP via InfoBlox
+# enable_neutron_port_forwarding: "no"      # Port Forwarding
+# ---
+nova_backend_ceph:      "yes"
+nova_compute_virt_type: "kvm"
+nova_console:           "novnc"
+# ---
+enable_octavia: "yes"
+octavia_provider_drivers: amphora:Amphora
+# 2025.1
+# enable_redis:   "yes"
+# enable_valkey:  "no"
+# 2025.2
+# enable_redis:   "no"
+# enable_valkey:  "yes"
+# ---
+# https://www.rabbitmq.com/partitions.html
+rabbitmq_cluster_partition_handling: autoheal
+# ---
+enable_skyline: yes

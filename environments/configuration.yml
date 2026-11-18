@@ -29,6 +29,8 @@ resolvconf_search: lab.nfgd.net
 ##########################
 # hosts
 
+hostname_use_fqdn: true
+
 hosts_additional_entries:
   int.os.lab.nfgd.net: 10.20.8.35
   services.lab.nfgd.net: 10.34.10.35

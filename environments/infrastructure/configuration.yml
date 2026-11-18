@@ -2,4 +2,6 @@
 ##########################
 # netbox
 
-netbox_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
+# TODO
+netbox_host: 10.20.8.24
+# netbox_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface]['ipv4']['address'] }}"
