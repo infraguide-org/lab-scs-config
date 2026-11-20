@@ -1,3 +1,5 @@
+# Source: https://github.com/infraguide-org/lab-scs-config
+# Copyright (c) 2026 infraguide.org, MIT License
 ---
 ##########################################################
 # images
@@ -130,6 +132,22 @@ cinder_backend_ceph:         "yes"
 cinder_backup_driver:        "ceph"
 cinder_cluster_name:         "ceph"
 cinder_cluster_skip_precheck: "no"
+# The first entry repeats the kolla-ansible default, so existing volumes
+# (host@rbd-1#...) keep their backend. Each entry needs <cluster>.conf in
+# overlays/cinder and <cluster>.client.<user>.keyring in cinder-volume and
+# cinder-backup. Backups stay on the first cluster.
+# TODO: remove this definition when using with just default ceph cluster
+cinder_ceph_backends:
+  - name: "rbd-1"
+    cluster: "ceph"
+    user: "{{ ceph_cinder_user }}"
+    pool: "{{ ceph_cinder_pool_name }}"
+    enabled: "{{ cinder_backend_ceph | bool }}"
+  - name: "rbd-ceph1"
+    cluster: "ceph1"
+    user: "{{ ceph_cinder_user }}"
+    pool: "{{ ceph_cinder_pool_name }}"
+    enabled: "{{ cinder_backend_ceph | bool }}"
 # ---
 enable_cloudkitty:            "no"
 cloudkitty_collector_backend: "prometheus"

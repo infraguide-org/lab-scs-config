@@ -1,3 +1,5 @@
+# Source: https://github.com/infraguide-org/lab-scs-config
+# Copyright (c) 2026 infraguide.org, MIT License
 # NOTE: This file must be edited before using the configuration repository.
 #       This file serves as a template for a node. There must be a separate
 #       host vars file for each node in the cluster. The IP addresses, interface
@@ -53,6 +55,12 @@ kolla_external_vip_interface: srvc0
 # octavia_network_interface:
 storage_interface: strg0
 tunnel_interface: dpln0
+
+# Ceph cluster for Nova (ephemeral disks and Cinder volumes) on this node.
+# Kolla reads ceph1.conf and ceph1.client.cinder.keyring from
+# overlays/nova/<inventory_hostname>/.
+# TODO: remove when only default ceph cluster should be used
+ceph_cluster: ceph1
 
 ##########################################################
 # ceph
