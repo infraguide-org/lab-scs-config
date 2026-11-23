@@ -16,7 +16,7 @@
 # group_vars (rendered at image build time), not from this repository. Writing a
 # literal would create two independent sources for one fact, and a namespace
 # naming one series while the tags name another fails the pull.
-docker_namespace: "kolla/release/{{ openstack_version }}"
+docker_namespace:         "kolla/release/{{ openstack_version }}"
 
 # TODO:
 # skopeo list-tags docker://registry.osism.tech/quay/openstack.kolla/neutron-server

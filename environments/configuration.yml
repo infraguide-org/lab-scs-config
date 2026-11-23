@@ -4,6 +4,12 @@
 
 docker_version: '5:28.5.2'
 docker_user: "{{ operator_user }}"
+docker_insecure_registries:
+  - registry.lab.nfgd.net
+  - registry.services.lab.nfgd.net
+
+docker_registry:       registry.lab.nfgd.net/dockerhub
+docker_registry_kolla: registry.lab.nfgd.net/osism
 
 ##########################
 # operator
