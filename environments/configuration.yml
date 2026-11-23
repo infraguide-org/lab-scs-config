@@ -11,7 +11,7 @@ docker_user: "{{ operator_user }}"
 operator_user: dragon
 
 # yamllint disable rule:line-length
-operator_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDxT4Iqg/MmiXF0y/epCBJCzRvAKmyS0LYU8IVsVkY3e root@node7149
+operator_public_key: [CHANGEME]
 # yamllint enable rule:line-length
 
 operator_authorized_keys:
