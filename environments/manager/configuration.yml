@@ -4,12 +4,18 @@
 ##########################
 # docker registries
 
-docker_registry: index.docker.io
+docker_insecure_registries:
+  - registry.lab.nfgd.net
+  - registry.services.lab.nfgd.net
+
+docker_registry:         registry.lab.nfgd.net/dockerhub
+docker_registry_ansible: registry.lab.nfgd.net/osism
+docker_registry_netbox:  registry.lab.nfgd.net/osism
 
 ##########################
 # versions
 
-manager_version: 11.0.2
+manager_version: 10.3.0
 
 
 ##########################
@@ -36,17 +42,26 @@ osism_api_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface
 ##########################
 # configuration
 
-configuration_git_private_key_file: ~/.ssh/id_rsa.configuration
+# configuration_git_private_key_file: ~/.ssh/id_rsa.configuration
+# configuration_git_host: github.com
+# configuration_git_port: 22
+# # yamllint disable rule:line-length
+# configuration_git_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbFiezkGcOWpqUrS3onQ1uo4f2/oJGVwDDnFcn70jzZMaEgDnTB4PaOaKkl7Un/tNdJ1m6DMxKHi494EGqNyCvaYrnGhg6UbOHFkhKUJYYWxRT7D/nVRkbaoOC7Atqwg5V1hiKxwtSASUj7uXfLhDBuoktAmax9pr2l1WKQC1ItK9NcsRT5/r2Rjah7DcNNdVu09UoJjDshZYTyCD5GYY9Y7gmUSpwcWyc2vtHsb7Dqlt+XC27jonDlmtZN28x+NCaY55JvQxzgLTIuayMILQ2b+UxxJBUDT2cTTMq9sRNKWgMkbd7FtnqtapkrvFi8SjYQc7TwWewb6EdqG04ZcEu0ofBaHH8cbRMnK8yjG6R12XPBJXXmYezs0H0CWIRWjjzhsUvXL0W+OMyJSRvEPEMjR3fSzX3LS44C5xsfGnV/dbGd7YeeuIw/6nRWMPo0SrxSwppk7sVotBgql5WRuV/HxsoKxRJcfGTpflvnXrS4ZjN0VMW6sHSO4WAirlMt0xrBTIqx+MlQIBcMq+brzr/YwPwD3io7+yURv8O+Y8fgiQjMMnjHR8/tr8wbtppjfKS03sDBwDw9CU/DiZcHm2qisYehM5yADd90RRFX6Gn1B9bakEVUOqiptsXqNRFWOrpBVVPo5BlZNFHpMOAK5ohdgBTSDv7kAlF50Nt9EE4zQ==
+# # yamllint enable rule:line-length
+# configuration_git_protocol: ssh
+# configuration_git_repository: infraguide-org/lab-scs-config
+# configuration_git_username: git
+# configuration_git_version: main
 
+
+configuration_git_protocol: https
 configuration_git_host: github.com
-configuration_git_port: 22
-# yamllint disable rule:line-length
-configuration_git_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbFiezkGcOWpqUrS3onQ1uo4f2/oJGVwDDnFcn70jzZMaEgDnTB4PaOaKkl7Un/tNdJ1m6DMxKHi494EGqNyCvaYrnGhg6UbOHFkhKUJYYWxRT7D/nVRkbaoOC7Atqwg5V1hiKxwtSASUj7uXfLhDBuoktAmax9pr2l1WKQC1ItK9NcsRT5/r2Rjah7DcNNdVu09UoJjDshZYTyCD5GYY9Y7gmUSpwcWyc2vtHsb7Dqlt+XC27jonDlmtZN28x+NCaY55JvQxzgLTIuayMILQ2b+UxxJBUDT2cTTMq9sRNKWgMkbd7FtnqtapkrvFi8SjYQc7TwWewb6EdqG04ZcEu0ofBaHH8cbRMnK8yjG6R12XPBJXXmYezs0H0CWIRWjjzhsUvXL0W+OMyJSRvEPEMjR3fSzX3LS44C5xsfGnV/dbGd7YeeuIw/6nRWMPo0SrxSwppk7sVotBgql5WRuV/HxsoKxRJcfGTpflvnXrS4ZjN0VMW6sHSO4WAirlMt0xrBTIqx+MlQIBcMq+brzr/YwPwD3io7+yURv8O+Y8fgiQjMMnjHR8/tr8wbtppjfKS03sDBwDw9CU/DiZcHm2qisYehM5yADd90RRFX6Gn1B9bakEVUOqiptsXqNRFWOrpBVVPo5BlZNFHpMOAK5ohdgBTSDv7kAlF50Nt9EE4zQ==
-# yamllint enable rule:line-length
-configuration_git_protocol: ssh
+configuration_git_port: 443
 configuration_git_repository: infraguide-org/lab-scs-config
-configuration_git_username: git
 configuration_git_version: main
+#configuration_git_username: "{{ configuration_git_token }}"       # private repository: the token goes in as the user name; for a public one, remove the line or clear it
+configuration_no_log: false               # only while debugging
+
 
 # TODO
 # network_managed_externally: true

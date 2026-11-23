@@ -11,7 +11,7 @@ docker_user: "{{ operator_user }}"
 operator_user: dragon
 
 # yamllint disable rule:line-length
-operator_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbNKhSQbQFYr1UsJukTETTlJUwFp8s0t/25SRUnOxpVWlVL+B8G5g3H3tXNGHjqdSjicRpBorGA9VI2JM6o9P+syXn000DUjB4wQQLRuw23geRgp5tmuknPMgysDPbal4wY92p3LEsBGn4I1abSBZ9cqXM38pdqS05mVNlc+fU28WoX/TvF3MEJ4aux3zeC7l+k2osW7Z9WKEilE4726nT2dZRPfsnPFg1KuNB3VAFtXdpbt5C41ZF50vZzULbUAwSl7/aevx0BoCysAqI9DDFjO9SovC5NguvlBfuyU1Bp1+UTqvgFrpwUO/uj5Xgj4vAAaMTbO+M4HOZ9PGb3FFXvXTzUt1N6g6GpXeR9nlKt7Jr6x9NSv1rxHJdql56Ei3ZLfoAMcWDTnMXzbQZKwyEC0sht1mcAi+FVonLweflRR2tVXD12cd6MHpF5r3jLi6N7xDJqf6p1a7ouuQRPvAljrpX46+GfnVBI5iDdmo2dp9uad9UAolp5xxtc6JIqxhzou6AdDlX5VKGhc4K0PRi8WxL+qhmpSWdy0uR+VmbPJBZRf1rn3fmUwjLm/ldkZKJ7D0VxQ4BByNjYKfCLCYqTvueLMGg8se8BcTG38lukN52ps4Sb4Yj2d/svRT2uirjURI4O/5J4xKBNgYQk2+TfghWnPuDmQLLN4OEOYAWgQ==
+operator_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDxT4Iqg/MmiXF0y/epCBJCzRvAKmyS0LYU8IVsVkY3e root@node7149
 # yamllint enable rule:line-length
 
 operator_authorized_keys:
@@ -64,3 +64,14 @@ required_packages_default:
   - tmux
   - tree
   - whois
+
+
+proxy_proxies:
+  http: "http://proxy.lab.nfgd.net:3128"
+  https: "http://proxy.lab.nfgd.net:3128"
+proxy_no_proxy_extra:
+  - lab.nfgd.net
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+
