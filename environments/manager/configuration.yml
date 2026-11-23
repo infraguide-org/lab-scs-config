@@ -54,13 +54,14 @@ osism_api_host: "{{ hostvars[inventory_hostname]['ansible_' + internal_interface
 # configuration_git_version: main
 
 
-configuration_git_protocol: https
-configuration_git_host: github.com
-configuration_git_port: 443
+configuration_git_protocol:   https
+configuration_git_host:       github.com
+configuration_git_port:       443
 configuration_git_repository: infraguide-org/lab-scs-config
-configuration_git_version: main
-#configuration_git_username: "{{ configuration_git_token }}"       # private repository: the token goes in as the user name; for a public one, remove the line or clear it
-configuration_no_log: false               # only while debugging
+configuration_git_version:    main
+configuration_no_log:         false
+configuration_git_proxy:      http://proxy.lab.nfgd.net:3128
+#configuration_git_username: 
 
 
 # TODO
