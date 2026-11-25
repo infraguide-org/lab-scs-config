@@ -40,7 +40,8 @@ prometheus_instance_label: "{{ ansible_facts.hostname }}"
 #
 neutron_bridge_name:         "br-pblc0,br-lmgt0,br-ex0"
 neutron_external_interface:  "pblc0,lmgt0,xtrn0"
-neutron_dnsmasq_dns_servers: "10.14.0.10"
+neutron_dnsmasq_dns_servers: "8.8.8.8"
+neutron_dns_domain:           lab.nfgd.net.
 ml2_network_vlan_ranges:
   br-irnc0: "3890:3899"
 

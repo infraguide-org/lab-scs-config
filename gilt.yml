@@ -26,3 +26,16 @@
       post_commands:
         - python3 set-versions.py
         - rm set-versions.py
+- git: https://github.com/osism/kolla-operations.git
+  version: 291454627f26c434ed481c7e8b6940c13bec9a54
+  files:
+    # Grafana: dashboards (ceph/, infrastructure/, openstack/), home dashboard, provisioning
+    - src: grafana/dashboards
+      dst: environments/kolla/files/overlays/grafana/dashboards
+    - src: grafana/grafana_home_dashboard.json
+      dst: environments/kolla/files/overlays/grafana/grafana_home_dashboard.json
+    - src: grafana/provisioning.yaml
+      dst: environments/kolla/files/overlays/grafana/provisioning.yaml
+    # Prometheus: alerting and recording rules
+    - src: prometheus/*.rules
+      dst: environments/kolla/files/overlays/prometheus/

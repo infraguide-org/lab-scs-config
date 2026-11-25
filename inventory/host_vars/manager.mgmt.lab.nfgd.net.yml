@@ -42,7 +42,7 @@ network_interface: cpln0
 
 # NOTE: These parameters are only commented out if necessary.
 # DOCS: https://osism.tech/docs/guides/configuration-guide/openstack/#network-interfaces
-# api_interface:
+api_interface: cpln0
 # bifrost_network_interface:
 # dns_interface:
 # kolla_external_vip_interface:
