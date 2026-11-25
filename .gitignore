@@ -9,3 +9,6 @@ roles
 secrets
 secure.yml
 environments/kolla/secrets.yml
+environments/kolla/certificates/
+environments/kolla/files/overlays/grafana/
+environments/kolla/files/overlays/prometheus/

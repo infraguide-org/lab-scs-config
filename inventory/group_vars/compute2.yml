@@ -1,0 +1,9 @@
+---
+nova_cell_ceph_backend:
+  cluster: "cephaz2"
+  vms:
+    user: "cinder"
+    pool: "vms"
+  volumes:
+    user: "cinder"
+    pool: "volumes"

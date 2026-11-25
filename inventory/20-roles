@@ -33,11 +33,21 @@ controller03.mgmt.lab.nfgd.net
 
 # Virtual systems managed by OpenStack Nova are placed on
 # nodes in this group.
-[compute]
+[compute:children]
+compute0
+compute1
+compute2
+
+[compute0]
 compute01.mgmt.lab.nfgd.net
 compute02.mgmt.lab.nfgd.net
+
+[compute1]
 compute11.mgmt.lab.nfgd.net
 compute12.mgmt.lab.nfgd.net
+[compute2]
+compute21.mgmt.lab.nfgd.net
+compute22.mgmt.lab.nfgd.net
 
 # Network resources managed by OpenStack Neutron, Octavia and Designate,
 # such as routers, are placed on these nodes. This group has nothing

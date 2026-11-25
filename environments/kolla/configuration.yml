@@ -54,10 +54,6 @@ openstack_service_workers: 5
 # elasticsearch
 opensearch_heap_size: "4g"
 
-# neutron
-# neutron_plugin_agent: "ovn"
-neutron_ovn_availability_zones: [nova]
-neutron_dns_domain: lab.nfgd.net.
 
 # octavia
 # TODO
@@ -140,16 +136,36 @@ cinder_cluster_skip_precheck: "no"
 # cinder-backup. Backups stay on the first cluster.
 # TODO: remove this definition when using with just default ceph cluster
 cinder_ceph_backends:
-  - name: "rbd-1"
-    cluster: "ceph"
-    user: "{{ ceph_cinder_user }}"
-    pool: "{{ ceph_cinder_pool_name }}"
-    enabled: "{{ cinder_backend_ceph | bool }}"
-  - name: "rbd-ceph1"
-    cluster: "ceph1"
-    user: "{{ ceph_cinder_user }}"
-    pool: "{{ ceph_cinder_pool_name }}"
-    enabled: "{{ cinder_backend_ceph | bool }}"
+  - name: rbd-default
+    cluster: ceph
+    user: cinder
+    pool: volumes
+    enabled: true
+  - name: rbd-az1
+    cluster: cephaz1
+    user: cinder
+    pool: volumes
+    enabled: true
+  - name: rbd-az2
+    cluster: cephaz2
+    user: cinder
+    pool: volumes
+    enabled: true
+
+cinder_default_availability_zone: "az1"
+
+# cinder_backup_backend_ceph_name: rbd-default
+# ceph_cinder_backup_pool_name: backups
+# ceph_cinder_backup_user: cinder-backup
+
+cinder_backup_ceph_backend:
+  name:    "rbd-backup"
+  cluster: "ceph"
+  user:    "cinder-backup"
+  pool:    "backups"
+  type:     rbd
+  enabled: "{{ enable_cinder_backup | bool }}"
+
 # ---
 enable_cloudkitty:            "no"
 cloudkitty_collector_backend: "prometheus"
@@ -369,14 +385,19 @@ prometheus_blackbox_exporter_endpoints: |
       | zip(openstack_external_fqdns) | list | map('join')
   }}
 # ---
-neutron_plugin_agent:        "ovn"
-# FIXME: deactivate
-# neutron_ovn_dhcp_agent:      "yes"
-neutron_ovn_dhcp_agent:      "no"
-neutron_ovn_distributed_fip: "yes"
-# ---
-enable_neutron_dvr: "yes"
+# neutron
+neutron_ovn_availability_zones: [nova]
+neutron_plugin_agent:        "openvswitch"
+enable_neutron_dvr: "no"
+enable_neutron_vpnaas: "yes"
+enable_neutron_provider_networks: "yes"
+enable_neutron_port_forwarding: "yes"
 enable_neutron_agent_ha: "yes"
+enable_neutron_qos: "yes"
+neutron_ovn_vpn_agent_extra_volumes: []
+openvswitch_hostname: "{{ ansible_facts.hostname }}"
+
+
 # enable_neutron_genericswitch: "yes"
 # enable_neutron_bgp_dragent: "yes"
 
