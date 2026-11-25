@@ -8,3 +8,4 @@ ironic-agent.kernel
 roles
 secrets
 secure.yml
+environments/kolla/secrets.yml
